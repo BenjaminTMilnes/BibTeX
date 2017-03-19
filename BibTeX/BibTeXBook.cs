@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BibTeX
 {
     [BibTeXEntryName("book")]
-    public class BibTeXBook
+    public class BibTeXBook : IBibTeXEntry
     {
         [BibTeXFieldName("author")]
         public string Author { get; set; }
