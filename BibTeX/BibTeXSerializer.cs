@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace BibTeX
 {
@@ -20,6 +21,26 @@ namespace BibTeX
         public string GetBibTeXEntryName(Type type)
         {
             return ((BibTeXEntryName)Attribute.GetCustomAttribute(type, typeof(BibTeXEntryName))).EntryName;
+        }
+
+        public string GetBibTeXFieldName(PropertyInfo propertyInfo)
+        {
+            return ((BibTeXFieldName)propertyInfo.GetCustomAttribute(typeof(BibTeXFieldName))).FieldName;
+        }
+
+        public string[] GetBibTeXFieldNames(PropertyInfo[] propertyInfos)
+        {
+            return propertyInfos.Select((propertyInfo) => GetBibTeXFieldName(propertyInfo)).ToArray();
+        }
+
+        public string[] GetBibTeXFieldNames(Type type)
+        {
+            return GetBibTeXFieldNames(type.GetProperties());
+        }
+
+        public string[] GetBibTeXFieldNames(IBibTeXEntry entry)
+        {
+            return GetBibTeXFieldNames(GetBibTeXEntryType(entry));
         }
     }
 }
