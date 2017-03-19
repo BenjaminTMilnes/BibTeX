@@ -21,5 +21,32 @@ namespace BibTeX
         [BibTeXFieldName("year")]
         public string Year { get; set; }
 
+        [BibTeXFieldName("volume")]
+        [BibTeXOptionalField]
+        public string Volume { get; set; }
+
+        [BibTeXFieldName("series")]
+        [BibTeXOptionalField]
+        public string Series { get; set; }
+
+        [BibTeXFieldName("address")]
+        [BibTeXOptionalField]
+        public string Address { get; set; }
+
+        [BibTeXFieldName("edition")]
+        [BibTeXOptionalField]
+        public string Edition { get; set; }
+
+        [BibTeXFieldName("month")]
+        [BibTeXOptionalField]
+        public string Month { get; set; }
+
+        [BibTeXFieldName("note")]
+        [BibTeXOptionalField]
+        public string Note { get; set; }
+
+        [BibTeXFieldName("key")]
+        [BibTeXOptionalField]
+        public string Key { get; set; }
     }
 }
