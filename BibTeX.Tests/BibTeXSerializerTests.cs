@@ -25,9 +25,21 @@ namespace BibTeX.Tests
         }
 
         [TestMethod]
+        public void GetBibTeXFieldsTest()
+        {
+
+            Assert.AreEqual(11, _serializer.GetBibTeXFields(new BibTeXBook()).Count());
+
+        }
+
+        [TestMethod]
         public void GetBibTeXFieldNamesTest()
         {
-            Assert.AreEqual((new string[] { "author", "title", "publisher", "year", "volume", "series", "address", "edition", "month", "note", "key" }).OrderBy((name) => name).ToArray(), _serializer.GetBibTeXFieldNames(new BibTeXBook()).OrderBy((name) => name).ToArray());
+            var expectedFieldNames = (new string[] { "author", "title", "publisher", "year", "volume", "series", "address", "edition", "month", "note", "key" }).OrderBy((name) => name).ToArray();
+            var fieldNames = _serializer.GetBibTeXFieldNames(new BibTeXBook()).OrderBy((name) => name).ToArray();
+
+            Assert.IsTrue(expectedFieldNames.SequenceEqual(fieldNames));
+
         }
     }
 }
