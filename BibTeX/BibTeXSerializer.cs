@@ -65,5 +65,21 @@ namespace BibTeX
             return GetBibTeXFields(type);
 
         }
+
+        public Tuple<string, int, string> GetBibTeXField(IBibTeXEntry entry, PropertyInfo propertyInfo)
+        {
+            var fieldName = GetBibTeXFieldName(propertyInfo);
+            var fieldValue = propertyInfo.GetValue(entry).ToString();
+
+            return new Tuple<string, int, string>(fieldName, 0, fieldValue);
+        }
+
+        public IEnumerable<Tuple<string, int, string>> GetBibTeXFields( IBibTeXEntry entry, PropertyInfo[] propertyInfos)
+        {
+            foreach (var propertyInfo in propertyInfos)
+            {
+                yield return GetBibTeXField(entry, propertyInfo);
+            }
+        }
     }
 }
