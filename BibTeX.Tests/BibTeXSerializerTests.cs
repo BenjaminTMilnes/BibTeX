@@ -21,7 +21,7 @@ namespace BibTeX.Tests
         [TestMethod]
         public void GetBibTeXEntryNameTest()
         {
-            Assert.AreEqual("book", _serializer.GetBibTeXEntryName(_serializer.GetBibTeXEntryType(new BibTeXBook())));
+            Assert.AreEqual("book", _serializer.GetBibTeXEntryName( new BibTeXBook()));
         }
 
         [TestMethod]
@@ -39,6 +39,18 @@ namespace BibTeX.Tests
             var fieldNames = _serializer.GetBibTeXFieldNames(new BibTeXBook()).OrderBy((name) => name).ToArray();
 
             Assert.IsTrue(expectedFieldNames.SequenceEqual(fieldNames));
+        }
+
+        [TestMethod]
+        public void GetBibTeXFieldByNameTest()
+        {
+            var book = new BibTeXBook();
+
+            book.Author = "B. T. Milnes";
+
+            var propertyInfo = _serializer.GetBibTeXFieldByName(book, "author");
+
+            Assert.AreEqual(book.Author, propertyInfo.GetValue(book));
 
         }
     }

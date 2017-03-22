@@ -48,5 +48,15 @@ namespace BibTeX
         [BibTeXFieldName("key")]
         [BibTeXOptionalField]
         public string Key { get; set; }
+
+        public BibTeXBook() { }
+
+        public BibTeXBook(string author, string title, string publisher, string year)
+        {
+            Author = author;
+            Title = title;
+            Publisher = publisher;
+            Year = year;
+        }
     }
 }

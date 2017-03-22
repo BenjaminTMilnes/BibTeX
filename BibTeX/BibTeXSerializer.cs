@@ -21,7 +21,13 @@ namespace BibTeX
         public string GetBibTeXEntryName(Type type)
         {
             return type.GetCustomAttribute<BibTeXEntryName>().EntryName;
+        }
 
+        public string GetBibTeXEntryName(IBibTeXEntry entry)
+        {
+            var type = GetBibTeXEntryType(entry);
+
+            return GetBibTeXEntryName(type);
         }
 
 
@@ -31,39 +37,53 @@ namespace BibTeX
 
         }
 
-        public string[] GetBibTeXFieldNames(PropertyInfo[] propertyInfos)
+        public IEnumerable<string> GetBibTeXFieldNames(IEnumerable<PropertyInfo> propertyInfos)
         {
-            return propertyInfos.Select((propertyInfo) => GetBibTeXFieldName(propertyInfo)).ToArray();
+            return propertyInfos.Select((propertyInfo) => GetBibTeXFieldName(propertyInfo));
         }
 
-        public string[] GetBibTeXFieldNames(Type type)
+        public IEnumerable<string> GetBibTeXFieldNames(Type type)
         {
             var fields = GetBibTeXFields(type);
 
             return GetBibTeXFieldNames(fields);
         }
 
-        public string[] GetBibTeXFieldNames(IBibTeXEntry entry)
+        public IEnumerable<string> GetBibTeXFieldNames(IBibTeXEntry entry)
         {
             var type = GetBibTeXEntryType(entry);
 
             return GetBibTeXFieldNames(type);
         }
 
-        public PropertyInfo[] GetBibTeXFields(Type type)
+        public IEnumerable<PropertyInfo> GetBibTeXFields(Type type)
         {
             var properties = type.GetProperties();
-            var fields = properties.Where((property) => property.GetCustomAttributes<BibTeXFieldName>().Any()).ToArray();
+            var fields = properties.Where((property) => property.GetCustomAttributes<BibTeXFieldName>().Any());
 
             return fields;
         }
 
-        public PropertyInfo[] GetBibTeXFields(IBibTeXEntry entry)
+        public IEnumerable<PropertyInfo> GetBibTeXFields(IBibTeXEntry entry)
         {
             var type = GetBibTeXEntryType(entry);
 
             return GetBibTeXFields(type);
 
+        }
+
+        public PropertyInfo GetBibTeXFieldByName(Type type, string name)
+        {
+            var fields = GetBibTeXFields(type);
+
+            return fields.First((field) => GetBibTeXFieldName(field) == name);
+        }
+
+        public PropertyInfo GetBibTeXFieldByName(IBibTeXEntry entry, string name)
+        {
+            var type = GetBibTeXEntryType(entry);
+
+            return GetBibTeXFieldByName(type, name);
         }
 
         public Tuple<string, int, string> GetBibTeXField(IBibTeXEntry entry, PropertyInfo propertyInfo)
@@ -74,7 +94,7 @@ namespace BibTeX
             return new Tuple<string, int, string>(fieldName, 0, fieldValue);
         }
 
-        public IEnumerable<Tuple<string, int, string>> GetBibTeXFields( IBibTeXEntry entry, PropertyInfo[] propertyInfos)
+        public IEnumerable<Tuple<string, int, string>> GetBibTeXFields(IBibTeXEntry entry, PropertyInfo[] propertyInfos)
         {
             foreach (var propertyInfo in propertyInfos)
             {
