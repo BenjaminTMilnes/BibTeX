@@ -21,7 +21,7 @@ namespace BibTeX.Tests
         [TestMethod]
         public void GetBibTeXEntryNameTest()
         {
-            Assert.AreEqual("book", _serializer.GetBibTeXEntryName( new BibTeXBook()));
+            Assert.AreEqual("book", _serializer.GetBibTeXEntryName(new BibTeXBook()));
         }
 
         [TestMethod]
@@ -35,8 +35,26 @@ namespace BibTeX.Tests
         [TestMethod]
         public void GetBibTeXFieldNamesTest()
         {
-            var expectedFieldNames = (new string[] { "author", "title", "publisher", "year", "volume", "series", "address", "edition", "month", "note", "key" }).OrderBy((name) => name).ToArray();
-            var fieldNames = _serializer.GetBibTeXFieldNames(new BibTeXBook()).OrderBy((name) => name).ToArray();
+            var expectedFieldNames = (new string[] { "author", "title", "publisher", "year", "volume", "series", "address", "edition", "month", "note", "key" }).OrderBy((name) => name);
+            var fieldNames = _serializer.GetBibTeXFieldNames(new BibTeXBook()).OrderBy((name) => name);
+
+            Assert.IsTrue(expectedFieldNames.SequenceEqual(fieldNames));
+        }
+
+        [TestMethod]
+        public void GetBibTeXOptionalFieldsTest()
+        {
+
+            Assert.AreEqual(7, _serializer.GetBibTeXOptionalFields(new BibTeXBook()).Count());
+
+        }
+
+        [TestMethod]
+        public void GetBibTeXOptionalFieldNamesTest()
+        {
+
+            var expectedFieldNames = (new string[] { "volume", "series", "address", "edition", "month", "note", "key" }).OrderBy((name) => name);
+            var fieldNames = _serializer.GetBibTeXOptionalFieldNames(new BibTeXBook()).OrderBy((name) => name);
 
             Assert.IsTrue(expectedFieldNames.SequenceEqual(fieldNames));
         }

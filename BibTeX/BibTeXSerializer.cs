@@ -56,6 +56,22 @@ namespace BibTeX
             return GetBibTeXFieldNames(type);
         }
 
+        
+        public IEnumerable<string> GetBibTeXOptionalFieldNames(Type type)
+        {
+            var optionalFields = GetBibTeXOptionalFields(type);
+
+            return GetBibTeXFieldNames(optionalFields);
+        }
+
+        public IEnumerable<string> GetBibTeXOptionalFieldNames(IBibTeXEntry entry)
+        {
+            var type = GetBibTeXEntryType(entry);
+
+            return GetBibTeXFieldNames(type);
+        }
+
+
         public IEnumerable<PropertyInfo> GetBibTeXFields(Type type)
         {
             var properties = type.GetProperties();
@@ -70,6 +86,25 @@ namespace BibTeX
 
             return GetBibTeXFields(type);
 
+        }
+
+        public bool IsBibTeXFieldOptional(PropertyInfo propertyInfo)
+        {
+            return propertyInfo.GetCustomAttributes<BibTeXOptionalField>().Any();
+        }
+
+        public IEnumerable<PropertyInfo> GetBibTeXOptionalFields(Type type)
+        {
+            var fields = GetBibTeXFields(type);
+
+            return fields.Where((field) => IsBibTeXFieldOptional(field));
+        }
+
+        public IEnumerable<PropertyInfo> GetBibTeXOptionalFields(IBibTeXEntry entry)
+        {
+            var type = GetBibTeXEntryType(entry);
+
+            return GetBibTeXOptionalFields(type);
         }
 
         public PropertyInfo GetBibTeXFieldByName(Type type, string name)
