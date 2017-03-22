@@ -53,5 +53,18 @@ namespace BibTeX.Tests
             Assert.AreEqual(book.Author, propertyInfo.GetValue(book));
 
         }
+
+        [TestMethod]
+        public void SerializeBibTeXFieldTest()
+        {
+
+            var book = new BibTeXBook();
+
+            book.Author = "B. T. Milnes";
+
+            var propertyInfo = _serializer.GetBibTeXFieldByName(book, "author");
+
+            Assert.AreEqual("author = \"B. T. Milnes\"", _serializer.SerializeBibTeXField(book, propertyInfo));
+        }
     }
 }

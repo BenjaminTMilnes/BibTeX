@@ -101,5 +101,12 @@ namespace BibTeX
                 yield return GetBibTeXField(entry, propertyInfo);
             }
         }
+
+        public string SerializeBibTeXField(IBibTeXEntry entry, PropertyInfo propertyInfo)
+        {
+            var field = GetBibTeXField(entry, propertyInfo);
+
+            return $"{field.Item1} = \"{field.Item3}\"";
+        }
     }
 }
