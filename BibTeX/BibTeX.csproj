@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BibTeXBook.cs" />
+    <Compile Include="BibTeXEntry.cs" />
     <Compile Include="BibTeXEntryName.cs" />
     <Compile Include="BibTeXFieldName.cs" />
     <Compile Include="BibTeXMonth.cs" />

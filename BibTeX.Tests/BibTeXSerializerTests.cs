@@ -27,9 +27,7 @@ namespace BibTeX.Tests
         [TestMethod]
         public void GetBibTeXFieldsTest()
         {
-
             Assert.AreEqual(11, _serializer.GetBibTeXFields(new BibTeXBook()).Count());
-
         }
 
         [TestMethod]
@@ -44,15 +42,12 @@ namespace BibTeX.Tests
         [TestMethod]
         public void GetBibTeXOptionalFieldsTest()
         {
-
             Assert.AreEqual(7, _serializer.GetBibTeXOptionalFields(new BibTeXBook()).Count());
-
         }
 
         [TestMethod]
         public void GetBibTeXOptionalFieldNamesTest()
         {
-
             var expectedFieldNames = (new string[] { "volume", "series", "address", "edition", "month", "note", "key" }).OrderBy((name) => name);
             var fieldNames = _serializer.GetBibTeXOptionalFieldNames(new BibTeXBook()).OrderBy((name) => name);
 
@@ -69,13 +64,11 @@ namespace BibTeX.Tests
             var propertyInfo = _serializer.GetBibTeXFieldByName(book, "author");
 
             Assert.AreEqual(book.Author, propertyInfo.GetValue(book));
-
         }
 
         [TestMethod]
         public void SerializeBibTeXFieldTest()
         {
-
             var book = new BibTeXBook();
 
             book.Author = "B. T. Milnes";
