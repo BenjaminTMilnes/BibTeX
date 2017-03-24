@@ -55,6 +55,21 @@ namespace BibTeX.Tests
         }
 
         [TestMethod]
+        public void GetBibTeXRequiredFieldsTest()
+        {
+            Assert.AreEqual(4, _serializer.GetBibTeXRequiredFields(new BibTeXBook()).Count());
+        }
+
+        [TestMethod]
+        public void GetBibTeXRequiredFieldNamesTest()
+        {
+            var expectedFieldNames = (new string[] { "author", "title", "publisher", "year" }).OrderBy((name) => name);
+            var fieldNames = _serializer.GetBibTeXRequiredFieldNames(new BibTeXBook()).OrderBy((name) => name);
+
+            Assert.IsTrue(expectedFieldNames.SequenceEqual(fieldNames));
+        }
+
+        [TestMethod]
         public void GetBibTeXFieldByNameTest()
         {
             var book = new BibTeXBook();
