@@ -43,6 +43,7 @@
     <Compile Include="BibTeXBook.cs" />
     <Compile Include="BibTeXEntryName.cs" />
     <Compile Include="BibTeXFieldName.cs" />
+    <Compile Include="BibTeXMonth.cs" />
     <Compile Include="BibTeXOptionalField.cs" />
     <Compile Include="BibTeXSerializer.cs" />
     <Compile Include="IBibTeXEntry.cs" />

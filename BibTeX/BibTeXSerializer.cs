@@ -143,5 +143,10 @@ namespace BibTeX
 
             return $"{field.Item1} = \"{field.Item3}\"";
         }
+
+        public string SerializeBibTeXMonth(BibTeXMonth month)
+        {
+            return "";
+        }
     }
 }

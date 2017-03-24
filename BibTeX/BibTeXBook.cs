@@ -39,7 +39,7 @@ namespace BibTeX
 
         [BibTeXFieldName("month")]
         [BibTeXOptionalField]
-        public string Month { get; set; }
+        public BibTeXMonth Month { get; set; }
 
         [BibTeXFieldName("note")]
         [BibTeXOptionalField]
