@@ -153,7 +153,7 @@ namespace BibTeX
         public IEnumerable<string> GetBibTeXRequiredFieldNames(Type type)
         {
             var requiredFields = GetBibTeXRequiredFields(type);
-            
+
             return GetBibTeXFieldNames(requiredFields);
         }
 
@@ -171,6 +171,13 @@ namespace BibTeX
 
         #endregion
 
+        #region GetFields
+
+        /// <summary>
+        /// Gets the properties of this C# type which are BibTeX fields.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public IEnumerable<PropertyInfo> GetBibTeXFields(Type type)
         {
             var properties = type.GetProperties();
@@ -179,6 +186,11 @@ namespace BibTeX
             return fields;
         }
 
+        /// <summary>
+        /// Gets the properties of this BibTeX entry that are BibTeX fields.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
         public IEnumerable<PropertyInfo> GetBibTeXFields(IBibTeXEntry entry)
         {
             var type = GetBibTeXEntryType(entry);
@@ -186,11 +198,21 @@ namespace BibTeX
             return GetBibTeXFields(type);
         }
 
-        public bool IsBibTeXFieldOptional(PropertyInfo propertyInfo)
+        /// <summary>
+        /// Returns whether or not this C# property is an optional BibTeX field.
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public bool IsBibTeXFieldOptional(PropertyInfo property)
         {
-            return propertyInfo.GetCustomAttributes<BibTeXOptionalField>().Any();
+            return property.GetCustomAttributes<BibTeXOptionalField>().Any();
         }
 
+        /// <summary>
+        /// Gets the properties of this C# type that are optional BibTeX fields.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public IEnumerable<PropertyInfo> GetBibTeXOptionalFields(Type type)
         {
             var fields = GetBibTeXFields(type);
@@ -198,6 +220,11 @@ namespace BibTeX
             return fields.Where((field) => IsBibTeXFieldOptional(field));
         }
 
+        /// <summary>
+        /// Gets the properties of this BibTeX entry that are optional BibTeX fields.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
         public IEnumerable<PropertyInfo> GetBibTeXOptionalFields(IBibTeXEntry entry)
         {
             var type = GetBibTeXEntryType(entry);
@@ -205,11 +232,21 @@ namespace BibTeX
             return GetBibTeXOptionalFields(type);
         }
 
-        public bool IsBibTeXFieldRequired(PropertyInfo propertyInfo)
+        /// <summary>
+        /// Returns whether or not this C# property is a required BibTeX field.
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public bool IsBibTeXFieldRequired(PropertyInfo property)
         {
-            return propertyInfo.GetCustomAttributes<BibTeXFieldName>().Any() && !propertyInfo.GetCustomAttributes<BibTeXOptionalField>().Any();
+            return property.GetCustomAttributes<BibTeXFieldName>().Any() && !property.GetCustomAttributes<BibTeXOptionalField>().Any();
         }
 
+        /// <summary>
+        /// Gets the properties of this C# type that are required BibTeX fields.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public IEnumerable<PropertyInfo> GetBibTeXRequiredFields(Type type)
         {
             var fields = GetBibTeXFields(type);
@@ -217,6 +254,11 @@ namespace BibTeX
             return fields.Where((field) => IsBibTeXFieldRequired(field));
         }
 
+        /// <summary>
+        /// Gets the properties of this BibTeX entry that are required BibTeX fields.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
         public IEnumerable<PropertyInfo> GetBibTeXRequiredFields(IBibTeXEntry entry)
         {
             var type = GetBibTeXEntryType(entry);
@@ -224,6 +266,12 @@ namespace BibTeX
             return GetBibTeXRequiredFields(type);
         }
 
+        /// <summary>
+        /// Gets the BibTeX field with the given field name.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public PropertyInfo GetBibTeXFieldByName(Type type, string name)
         {
             var fields = GetBibTeXFields(type);
@@ -231,6 +279,12 @@ namespace BibTeX
             return fields.First((field) => GetBibTeXFieldName(field) == name);
         }
 
+        /// <summary>
+        /// Gets the BibTeX field with the given field name.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public PropertyInfo GetBibTeXFieldByName(IBibTeXEntry entry, string name)
         {
             var type = GetBibTeXEntryType(entry);
@@ -238,21 +292,50 @@ namespace BibTeX
             return GetBibTeXFieldByName(type, name);
         }
 
-        public Tuple<string, int, string> GetBibTeXField(IBibTeXEntry entry, PropertyInfo propertyInfo)
+        /// <summary>
+        /// Given a BibTeX entry and a field, returns a tuple of the field name, order index, and value.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public Tuple<string, int, string> GetBibTeXFieldWithValue(IBibTeXEntry entry, PropertyInfo property)
         {
-            var fieldName = GetBibTeXFieldName(propertyInfo);
-            var fieldValue = propertyInfo.GetValue(entry).ToString();
+            var fieldName = GetBibTeXFieldName(property);
+            var fieldValue = property.GetValue(entry).ToString();
 
             return new Tuple<string, int, string>(fieldName, 0, fieldValue);
         }
 
-        public IEnumerable<Tuple<string, int, string>> GetBibTeXFields(IBibTeXEntry entry, IEnumerable<PropertyInfo> propertyInfos)
+        /// <summary>
+        /// Given a BibTeX entry and an enumerable of fields, returns an enumerable of tuples of the field names, order indices, and values.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="properties"></param>
+        /// <returns></returns>
+        public IEnumerable<Tuple<string, int, string>> GetBibTeXFieldsWithValues(IBibTeXEntry entry, IEnumerable<PropertyInfo> properties)
         {
-            foreach (var propertyInfo in propertyInfos)
+            foreach (var property in properties)
             {
-                yield return GetBibTeXField(entry, propertyInfo);
+                yield return GetBibTeXFieldWithValue(entry, property);
             }
         }
+
+        /// <summary>
+        /// Given a BibTeX entry, returns all of its fields and their values.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
+        public IEnumerable<Tuple<string, int, string>> GetBibTeXFieldsWithValues(IBibTeXEntry entry)
+        {
+            var fields = GetBibTeXFields(entry);
+
+            foreach (var field in fields)
+            {
+                yield return GetBibTeXFieldWithValue(entry, field);
+            }
+        }
+
+        #endregion
 
         public string SerializeBibTeXField(Tuple<string, int, string> field)
         {
@@ -270,7 +353,7 @@ namespace BibTeX
         {
             var entryName = GetBibTeXEntryName(entry);
             var propertyInfos = GetBibTeXFields(entry);
-            var fields = GetBibTeXFields(entry, propertyInfos);
+            var fields = GetBibTeXFieldsWithValues(entry, propertyInfos);
             var serializedFields = SerializeBibTeXFields(fields);
 
             return $"{BibTeXBeginEntryCharacter}{entryName}{BibTeXBeginFieldsCharacter}{serializedFields}{BibTeXEndFieldsCharacter}";
