@@ -45,7 +45,9 @@
     <Compile Include="BibTeXEntry.cs" />
     <Compile Include="BibTeXEntryName.cs" />
     <Compile Include="BibTeXFieldName.cs" />
+    <Compile Include="BibTeXFormatStyle.cs" />
     <Compile Include="BibTeXMonth.cs" />
+    <Compile Include="BibTeXMonthStyle.cs" />
     <Compile Include="BibTeXOptionalField.cs" />
     <Compile Include="BibTeXSerializer.cs" />
     <Compile Include="IBibTeXEntry.cs" />

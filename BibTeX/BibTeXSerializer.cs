@@ -18,6 +18,11 @@ namespace BibTeX
         protected readonly string BibTeXEndFieldValueCharacter;
         protected readonly string BibTeXFieldSeparatorCharacter = ",";
 
+        public BibTeXFormatStyle FormatStyle { get; }
+        public BibTeXMonthStyle MonthStyle { get; }
+
+        #region Constructors
+
         public BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType beginEndFieldValueCharacterType)
         {
             if (beginEndFieldValueCharacterType == BibTeXBeginEndFieldValueCharacterType.QuotationMarks)
@@ -31,7 +36,11 @@ namespace BibTeX
                 BibTeXBeginFieldValueCharacter = "{";
                 BibTeXEndFieldValueCharacter = "}";
             }
+
+            FormatStyle = BibTeXFormatStyle.Readable;
         }
+
+        #endregion
 
         #region GetEntryType
 
@@ -337,29 +346,99 @@ namespace BibTeX
 
         #endregion
 
+        #region SerializeFields
+
+        /// <summary>
+        /// Serializes a BibTeX field.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
         public string SerializeBibTeXField(Tuple<string, int, string> field)
         {
-            return $"{field.Item1} = {BibTeXBeginFieldValueCharacter}{field.Item3}{BibTeXEndFieldValueCharacter}";
+            var stringBuilder = new StringBuilder();
+
+            SerializeBibTeXField(stringBuilder, field);
+
+            return stringBuilder.ToString();
+        }
+
+        public void SerializeBibTeXField(StringBuilder stringBuilder, Tuple<string, int, string> field)
+        {
+            stringBuilder.Append(field.Item1);
+
+            if (FormatStyle == BibTeXFormatStyle.Readable)
+            {
+                stringBuilder.Append(" = ");
+            }
+            else
+            {
+                stringBuilder.Append("=");
+            }
+
+            stringBuilder.Append(BibTeXBeginFieldValueCharacter);
+            stringBuilder.Append(field.Item3);
+            stringBuilder.Append(BibTeXEndFieldValueCharacter);
         }
 
         public string SerializeBibTeXFields(IEnumerable<Tuple<string, int, string>> fields)
         {
-            return string.Join(BibTeXFieldSeparatorCharacter + "\n\t", fields.Select((field) => SerializeBibTeXField(field)));
+            var stringBuilder = new StringBuilder();
 
+            SerializeBibTeXFields(stringBuilder, fields);
+
+            return stringBuilder.ToString();
         }
 
+        public void SerializeBibTeXFields(StringBuilder stringBuilder, IEnumerable<Tuple<string, int, string>> fields)
+        {
+            foreach (var field in fields)
+            {
+                stringBuilder.Append(BibTeXFieldSeparatorCharacter);
+
+                if (FormatStyle == BibTeXFormatStyle.Readable)
+                {
+                    stringBuilder.Append("\n\t");
+                }
+
+                SerializeBibTeXField(stringBuilder, field);
+            }
+        }
+
+        #endregion
+
+        #region SerializeEntry
 
         public string SerializeBibTeXEntry(IBibTeXEntry entry)
         {
-            var entryName = GetBibTeXEntryName(entry);
-            var propertyInfos = GetBibTeXFields(entry);
-            var fields = GetBibTeXFieldsWithValues(entry, propertyInfos);
-            var serializedFields = SerializeBibTeXFields(fields);
+            var stringBuilder = new StringBuilder();
 
-            return $"{BibTeXBeginEntryCharacter}{entryName}{BibTeXBeginFieldsCharacter}{serializedFields}{BibTeXEndFieldsCharacter}";
+            SerializeBibTeXEntry(stringBuilder, entry);
 
-
+            return stringBuilder.ToString();
         }
+
+        public void SerializeBibTeXEntry(StringBuilder stringBuilder, IBibTeXEntry entry)
+        {
+            var entryName = GetBibTeXEntryName(entry);
+            var fields = GetBibTeXFieldsWithValues(entry);
+
+            stringBuilder.Append(BibTeXBeginEntryCharacter);
+            stringBuilder.Append(entryName);
+            stringBuilder.Append(BibTeXBeginFieldsCharacter);
+
+            SerializeBibTeXFields(stringBuilder, fields);
+
+            if (FormatStyle == BibTeXFormatStyle.Readable)
+            {
+                stringBuilder.Append("\n");
+            }
+
+            stringBuilder.Append(BibTeXEndFieldsCharacter);
+            stringBuilder.Append("\n");
+        }
+
+        #endregion
+
         public string SerializeBibTeXMonth(BibTeXMonth month)
         {
             return "";
