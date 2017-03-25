@@ -11,6 +11,29 @@ namespace BibTeX
 
     public class BibTeXSerializer
     {
+
+
+        protected readonly string BibTeXBeginEntryCharacter = "{";
+        protected readonly string BibTeXEndEntryCharacter = "}";
+        protected readonly string BibTeXBeginFieldValueCharacter;
+        protected readonly string BibTeXEndFieldValueCharacter;
+        protected readonly string BibTeXFieldSeparatorCharacter = ",";
+
+        public BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType beginEndFieldValueCharacterType)
+        {
+            if (beginEndFieldValueCharacterType == BibTeXBeginEndFieldValueCharacterType.QuotationMarks)
+            {
+                BibTeXBeginFieldValueCharacter = "\"";
+                BibTeXEndFieldValueCharacter = "\"";
+            }
+            else if (beginEndFieldValueCharacterType == BibTeXBeginEndFieldValueCharacterType.RecurveBrackets)
+            {
+
+                BibTeXBeginFieldValueCharacter = "{";
+                BibTeXEndFieldValueCharacter = "}";
+            }
+        }
+
         public Type GetBibTeXEntryType(IBibTeXEntry entry)
         {
             if (entry is BibTeXBook) return typeof(BibTeXBook);
@@ -170,7 +193,7 @@ namespace BibTeX
         {
             var field = GetBibTeXField(entry, propertyInfo);
 
-            return $"{field.Item1} = \"{field.Item3}\"";
+            return $"{field.Item1} = {BibTeXBeginFieldValueCharacter}{field.Item3}{BibTeXEndFieldValueCharacter}";
         }
 
         public string SerializeBibTeXMonth(BibTeXMonth month)
