@@ -12,9 +12,9 @@ namespace BibTeX
     public class BibTeXSerializer
     {
 
-
-        protected readonly string BibTeXBeginEntryCharacter = "{";
-        protected readonly string BibTeXEndEntryCharacter = "}";
+        protected readonly string BibTeXBeginEntryCharacter = "@";
+        protected readonly string BibTeXBeginFieldsCharacter = "{";
+        protected readonly string BibTeXEndFieldsCharacter = "}";
         protected readonly string BibTeXBeginFieldValueCharacter;
         protected readonly string BibTeXEndFieldValueCharacter;
         protected readonly string BibTeXFieldSeparatorCharacter = ",";
@@ -181,7 +181,7 @@ namespace BibTeX
             return new Tuple<string, int, string>(fieldName, 0, fieldValue);
         }
 
-        public IEnumerable<Tuple<string, int, string>> GetBibTeXFields(IBibTeXEntry entry, PropertyInfo[] propertyInfos)
+        public IEnumerable<Tuple<string, int, string>> GetBibTeXFields(IBibTeXEntry entry, IEnumerable<PropertyInfo> propertyInfos)
         {
             foreach (var propertyInfo in propertyInfos)
             {
@@ -189,13 +189,29 @@ namespace BibTeX
             }
         }
 
-        public string SerializeBibTeXField(IBibTeXEntry entry, PropertyInfo propertyInfo)
+        public string SerializeBibTeXField(Tuple<string, int, string> field)
         {
-            var field = GetBibTeXField(entry, propertyInfo);
-
             return $"{field.Item1} = {BibTeXBeginFieldValueCharacter}{field.Item3}{BibTeXEndFieldValueCharacter}";
         }
 
+        public string SerializeBibTeXFields(IEnumerable<Tuple<string, int, string>> fields)
+        {
+            return string.Join(BibTeXFieldSeparatorCharacter + "\n\t", fields.Select((field) => SerializeBibTeXField(field)));
+
+        }
+
+
+        public string SerializeBibTeXEntry(IBibTeXEntry entry)
+        {
+            var entryName = GetBibTeXEntryName(entry);
+            var propertyInfos = GetBibTeXFields(entry);
+            var fields = GetBibTeXFields(entry, propertyInfos);
+            var serializedFields = SerializeBibTeXFields(fields);
+
+            return $"{BibTeXBeginEntryCharacter}{entryName}{BibTeXBeginFieldsCharacter}{serializedFields}{BibTeXEndFieldsCharacter}";
+
+
+        }
         public string SerializeBibTeXMonth(BibTeXMonth month)
         {
             return "";
