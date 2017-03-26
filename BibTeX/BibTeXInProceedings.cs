@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace BibTeX
 {
-    [BibTeXEntryName("book")]
-    public class BibTeXBook : BibTeXEntry
+    [BibTeXEntryName("inproceedings")]
+    public class BibTeXInProceedings : BibTeXEntry
     {
         [BibTeXFieldName("author")]
         public string Author { get; set; }
@@ -15,11 +15,15 @@ namespace BibTeX
         [BibTeXFieldName("title")]
         public string Title { get; set; }
 
-        [BibTeXFieldName("publisher")]
-        public string Publisher { get; set; }
+        [BibTeXFieldName("booktitle")]
+        public string BookTitle { get; set; }
 
         [BibTeXFieldName("year")]
         public string Year { get; set; }
+
+        [BibTeXFieldName("editor")]
+        [BibTeXOptionalField]
+        public string Editor { get; set; }
 
         [BibTeXFieldName("volume")]
         [BibTeXOptionalField]
@@ -29,25 +33,33 @@ namespace BibTeX
         [BibTeXOptionalField]
         public string Series { get; set; }
 
+        [BibTeXFieldName("pages")]
+        [BibTeXOptionalField]
+        public string Pages { get; set; }
+
         [BibTeXFieldName("address")]
         [BibTeXOptionalField]
         public string Address { get; set; }
 
-        [BibTeXFieldName("edition")]
-        [BibTeXOptionalField]
-        public string Edition { get; set; }
-
         [BibTeXFieldName("month")]
         [BibTeXOptionalField]
         public BibTeXMonth Month { get; set; }
-        
-        public BibTeXBook() { }
 
-        public BibTeXBook(string author, string title, string publisher, string year)
+        [BibTeXFieldName("organization")]
+        [BibTeXOptionalField]
+        public string Organization { get; set; }
+
+        [BibTeXFieldName("publisher")]
+        [BibTeXOptionalField]
+        public string Publisher { get; set; }
+
+        public BibTeXInProceedings() { }
+
+        public BibTeXInProceedings(string author, string title, string bookTitle, string year)
         {
             Author = author;
             Title = title;
-            Publisher = publisher;
+            BookTitle = bookTitle;
             Year = year;
         }
     }

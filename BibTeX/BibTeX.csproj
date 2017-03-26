@@ -43,10 +43,13 @@
     <Compile Include="BibTeXArticle.cs" />
     <Compile Include="BibTeXBeginEndFieldValueCharacterType.cs" />
     <Compile Include="BibTeXBook.cs" />
+    <Compile Include="BibTeXBooklet.cs" />
+    <Compile Include="BibTeXConference.cs" />
     <Compile Include="BibTeXEntry.cs" />
     <Compile Include="BibTeXEntryName.cs" />
     <Compile Include="BibTeXFieldName.cs" />
     <Compile Include="BibTeXFormatStyle.cs" />
+    <Compile Include="BibTeXInProceedings.cs" />
     <Compile Include="BibTeXMonth.cs" />
     <Compile Include="BibTeXMonthStyle.cs" />
     <Compile Include="BibTeXOptionalField.cs" />

@@ -31,15 +31,7 @@ namespace BibTeX
         [BibTeXFieldName("year")]
         [BibTeXOptionalField]
         public string Year { get; set; }
-
-        [BibTeXFieldName("note")]
-        [BibTeXOptionalField]
-        public string Note { get; set; }
-
-        [BibTeXFieldName("key")]
-        [BibTeXOptionalField]
-        public string Key { get; set; }
-
+        
         public BibTeXBooklet() { }
 
         public BibTeXBooklet(string title)

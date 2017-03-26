@@ -35,15 +35,7 @@ namespace BibTeX
         [BibTeXFieldName("month")]
         [BibTeXOptionalField]
         public BibTeXMonth Month { get; set; }
-
-        [BibTeXFieldName("note")]
-        [BibTeXOptionalField]
-        public string Note { get; set; }
-
-        [BibTeXFieldName("key")]
-        [BibTeXOptionalField]
-        public string Key { get; set; }
-
+        
         public BibTeXArticle() { }
 
         public BibTeXArticle(string author, string title, string journal, string year, string volume)
