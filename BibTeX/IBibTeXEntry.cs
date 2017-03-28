@@ -8,5 +8,6 @@ namespace BibTeX
 {
     public interface IBibTeXEntry
     {
+        string CitationKey { get; set; }
     }
 }

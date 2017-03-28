@@ -425,6 +425,7 @@ namespace BibTeX
             stringBuilder.Append(BibTeXBeginEntryCharacter);
             stringBuilder.Append(entryName);
             stringBuilder.Append(BibTeXBeginFieldsCharacter);
+            stringBuilder.Append(entry.CitationKey);
 
             SerializeBibTeXFields(stringBuilder, fields);
 

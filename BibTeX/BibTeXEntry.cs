@@ -8,6 +8,8 @@ namespace BibTeX
 {
     public abstract class BibTeXEntry : IBibTeXEntry
     {
+        public string CitationKey { get; set; }
+
         [BibTeXFieldName("note")]
         [BibTeXOptionalField]
         public string Note { get; set; }
