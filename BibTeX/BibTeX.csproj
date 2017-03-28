@@ -50,6 +50,7 @@
     <Compile Include="BibTeXFieldName.cs" />
     <Compile Include="BibTeXFormatStyle.cs" />
     <Compile Include="BibTeXInBook.cs" />
+    <Compile Include="BibTeXInCollection.cs" />
     <Compile Include="BibTeXInProceedings.cs" />
     <Compile Include="BibTeXMonth.cs" />
     <Compile Include="BibTeXMonthStyle.cs" />
