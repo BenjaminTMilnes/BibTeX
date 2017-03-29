@@ -53,6 +53,8 @@
     <Compile Include="BibTeXInCollection.cs" />
     <Compile Include="BibTeXInProceedings.cs" />
     <Compile Include="BibTeXManual.cs" />
+    <Compile Include="BibTeXMastersThesis.cs" />
+    <Compile Include="BibTeXMiscellaneous.cs" />
     <Compile Include="BibTeXMonth.cs" />
     <Compile Include="BibTeXMonthStyle.cs" />
     <Compile Include="BibTeXOptionalField.cs" />
