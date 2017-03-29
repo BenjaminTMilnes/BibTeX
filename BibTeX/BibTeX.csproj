@@ -52,6 +52,7 @@
     <Compile Include="BibTeXInBook.cs" />
     <Compile Include="BibTeXInCollection.cs" />
     <Compile Include="BibTeXInProceedings.cs" />
+    <Compile Include="BibTeXManual.cs" />
     <Compile Include="BibTeXMonth.cs" />
     <Compile Include="BibTeXMonthStyle.cs" />
     <Compile Include="BibTeXOptionalField.cs" />
