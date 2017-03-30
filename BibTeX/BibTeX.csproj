@@ -61,6 +61,7 @@
     <Compile Include="BibTeXPhDThesis.cs" />
     <Compile Include="BibTeXProceedings.cs" />
     <Compile Include="BibTeXSerializer.cs" />
+    <Compile Include="BibTeXTechReport.cs" />
     <Compile Include="IBibTeXEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
