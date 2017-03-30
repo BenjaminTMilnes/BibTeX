@@ -62,6 +62,7 @@
     <Compile Include="BibTeXProceedings.cs" />
     <Compile Include="BibTeXSerializer.cs" />
     <Compile Include="BibTeXTechReport.cs" />
+    <Compile Include="BibTeXUnpublished.cs" />
     <Compile Include="IBibTeXEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
