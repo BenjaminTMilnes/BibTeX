@@ -472,7 +472,27 @@ namespace BibTeX
 
         public string SerializeBibTeXMonth(BibTeXMonth month)
         {
-            return "";
+            var monthNumber = (int)month;
+
+            if (MonthStyle == BibTeXMonthStyle.January)
+            {
+                return MonthNames[monthNumber];
+            }
+            else if (MonthStyle == BibTeXMonthStyle.Jan)
+            {
+                return AbbreviatedMonthNames[monthNumber];
+            }
+            else
+            {
+                if (monthNumber >= 1 && monthNumber <= 12)
+                {
+                    return monthNumber.ToString();
+                }
+                else
+                {
+                    return "";
+                }
+            }
         }
     }
 }
