@@ -93,5 +93,24 @@ namespace BibTeX.Tests
 
             Assert.AreEqual("author = \"B. T. Milnes\"", _serializer.SerializeBibTeXField(field));
         }
+
+        [TestMethod]
+        public void SerializeBibTeXMonthTest()
+        {
+            var serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.January);
+            var month = BibTeXMonth.December;
+
+            Assert.AreEqual("December", serializer.SerializeBibTeXMonth(month));
+
+            serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.Jan);
+            month = BibTeXMonth.November;
+
+            Assert.AreEqual("Nov", serializer.SerializeBibTeXMonth(month));
+
+            serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.Numeric);
+            month = BibTeXMonth.October;
+
+            Assert.AreEqual("10", serializer.SerializeBibTeXMonth(month));
+        }
     }
 }

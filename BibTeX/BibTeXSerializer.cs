@@ -27,7 +27,7 @@ namespace BibTeX
 
         #region Constructors
 
-        public BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType beginEndFieldValueCharacterType)
+        public BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType beginEndFieldValueCharacterType = BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle monthStyle = BibTeXMonthStyle.January, BibTeXFormatStyle formatStyle = BibTeXFormatStyle.Readable)
         {
             if (beginEndFieldValueCharacterType == BibTeXBeginEndFieldValueCharacterType.QuotationMarks)
             {
@@ -41,7 +41,8 @@ namespace BibTeX
                 BibTeXEndFieldValueCharacter = "}";
             }
 
-            FormatStyle = BibTeXFormatStyle.Readable;
+            MonthStyle = monthStyle;
+            FormatStyle = formatStyle;
         }
 
         #endregion
@@ -470,6 +471,8 @@ namespace BibTeX
 
         #endregion
 
+        #region SerializeBibTeXMonth
+
         public string SerializeBibTeXMonth(BibTeXMonth month)
         {
             var monthNumber = (int)month;
@@ -494,5 +497,7 @@ namespace BibTeX
                 }
             }
         }
+
+        #endregion
     }
 }
