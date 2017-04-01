@@ -406,7 +406,7 @@ namespace BibTeX
 
         #endregion
 
-        #region SerializeEntry
+        #region SerializeEntries
 
         public string SerializeBibTeXEntry(IBibTeXEntry entry)
         {
@@ -436,6 +436,32 @@ namespace BibTeX
 
             stringBuilder.Append(BibTeXEndFieldsCharacter);
             stringBuilder.Append("\n");
+        }
+
+        public string SerializeBibTeXEntries(IEnumerable<IBibTeXEntry> entries)
+        {
+            var stringBuilder = new StringBuilder();
+
+            SerializeBibTeXEntries(stringBuilder, entries);
+
+            return stringBuilder.ToString();
+        }
+
+        public void SerializeBibTeXEntries(StringBuilder stringBuilder, IEnumerable<IBibTeXEntry> entries)
+        {
+            foreach (var entry in entries)
+            {
+                SerializeBibTeXEntry(stringBuilder, entry);
+            }
+        }
+
+        #endregion
+
+        #region SerializeBibTeXDatabase
+
+        public string SerializeBibTeXDatabase(BibTeXDatabase database)
+        {
+            return SerializeBibTeXEntries(database.Entries);
         }
 
         #endregion
