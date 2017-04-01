@@ -15,11 +15,16 @@ namespace BibTeX
             Entries = new List<IBibTeXEntry>();
         }
 
-        #region GetEntryByCitationKey
+        #region GetEntriesByCitationKey
 
         public IBibTeXEntry GetEntryByCitationKey(string citationKey)
         {
             return Entries.Single((entry) => entry.CitationKey == citationKey);
+        }
+
+        public IEnumerable<IBibTeXEntry> GetEntriesByCitationKeys(IEnumerable<string> citationKeys)
+        {
+            return Entries.Where((entry) => citationKeys.Any((citationKey) => citationKey == entry.CitationKey));
         }
 
         #endregion
