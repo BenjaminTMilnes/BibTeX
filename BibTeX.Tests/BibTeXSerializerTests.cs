@@ -15,7 +15,7 @@ namespace BibTeX.Tests
 
         public BibTeXSerializerTests()
         {
-            _serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks);
+            _serializer = new BibTeXSerializer();
         }
 
         [TestMethod]
@@ -111,6 +111,20 @@ namespace BibTeX.Tests
             month = BibTeXMonth.October;
 
             Assert.AreEqual("10", serializer.SerializeBibTeXMonth(month));
+        }
+
+        [TestMethod]
+        public void SerializeBibTeXMonthFieldTest()
+        {
+            var serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.January);
+            var book = new BibTeXBook();
+
+            book.Month = BibTeXMonth.September;
+
+            var property = _serializer.GetBibTeXFieldByName(book, "month");
+            var field = _serializer.GetBibTeXFieldWithValue(book, property);
+
+            Assert.AreEqual("month = \"September\"", serializer.SerializeBibTeXField(field));
         }
     }
 }

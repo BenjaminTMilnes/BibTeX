@@ -312,12 +312,12 @@ namespace BibTeX
         /// <param name="entry"></param>
         /// <param name="property"></param>
         /// <returns></returns>
-        public Tuple<string, int, string> GetBibTeXFieldWithValue(IBibTeXEntry entry, PropertyInfo property)
+        public Tuple<string, int, object> GetBibTeXFieldWithValue(IBibTeXEntry entry, PropertyInfo property)
         {
             var fieldName = GetBibTeXFieldName(property);
-            var fieldValue = property.GetValue(entry).ToString();
+            var fieldValue = property.GetValue(entry);
 
-            return new Tuple<string, int, string>(fieldName, 0, fieldValue);
+            return new Tuple<string, int, object>(fieldName, 0, fieldValue);
         }
 
         /// <summary>
@@ -326,7 +326,7 @@ namespace BibTeX
         /// <param name="entry"></param>
         /// <param name="properties"></param>
         /// <returns></returns>
-        public IEnumerable<Tuple<string, int, string>> GetBibTeXFieldsWithValues(IBibTeXEntry entry, IEnumerable<PropertyInfo> properties)
+        public IEnumerable<Tuple<string, int, object>> GetBibTeXFieldsWithValues(IBibTeXEntry entry, IEnumerable<PropertyInfo> properties)
         {
             foreach (var property in properties)
             {
@@ -339,13 +339,38 @@ namespace BibTeX
         /// </summary>
         /// <param name="entry"></param>
         /// <returns></returns>
-        public IEnumerable<Tuple<string, int, string>> GetBibTeXFieldsWithValues(IBibTeXEntry entry)
+        public IEnumerable<Tuple<string, int, object>> GetBibTeXFieldsWithValues(IBibTeXEntry entry)
         {
             var fields = GetBibTeXFields(entry);
 
             foreach (var field in fields)
             {
                 yield return GetBibTeXFieldWithValue(entry, field);
+            }
+        }
+
+        #endregion
+
+        #region SerializeFieldValue
+
+        public string SerializeBibTeXFieldValue( object fieldValue)
+        {
+            var stringBuilder = new StringBuilder();
+
+            SerializeBibTeXFieldValue(stringBuilder, fieldValue);
+
+            return stringBuilder.ToString();
+        }
+        
+        public void SerializeBibTeXFieldValue( StringBuilder stringBuilder, object fieldValue)
+        {
+            if (fieldValue is BibTeXMonth)
+            {
+                stringBuilder.Append(SerializeBibTeXMonth((BibTeXMonth)fieldValue));
+            }
+            else
+            {
+                stringBuilder.Append(fieldValue.ToString());
             }
         }
 
@@ -358,7 +383,7 @@ namespace BibTeX
         /// </summary>
         /// <param name="field"></param>
         /// <returns></returns>
-        public string SerializeBibTeXField(Tuple<string, int, string> field)
+        public string SerializeBibTeXField(Tuple<string, int, object> field)
         {
             var stringBuilder = new StringBuilder();
 
@@ -367,7 +392,7 @@ namespace BibTeX
             return stringBuilder.ToString();
         }
 
-        public void SerializeBibTeXField(StringBuilder stringBuilder, Tuple<string, int, string> field)
+        public void SerializeBibTeXField(StringBuilder stringBuilder, Tuple<string, int, object> field)
         {
             stringBuilder.Append(field.Item1);
 
@@ -381,11 +406,11 @@ namespace BibTeX
             }
 
             stringBuilder.Append(BibTeXBeginFieldValueCharacter);
-            stringBuilder.Append(field.Item3);
+            SerializeBibTeXFieldValue(stringBuilder, field.Item3);
             stringBuilder.Append(BibTeXEndFieldValueCharacter);
         }
 
-        public string SerializeBibTeXFields(IEnumerable<Tuple<string, int, string>> fields)
+        public string SerializeBibTeXFields(IEnumerable<Tuple<string, int, object>> fields)
         {
             var stringBuilder = new StringBuilder();
 
@@ -394,7 +419,7 @@ namespace BibTeX
             return stringBuilder.ToString();
         }
 
-        public void SerializeBibTeXFields(StringBuilder stringBuilder, IEnumerable<Tuple<string, int, string>> fields)
+        public void SerializeBibTeXFields(StringBuilder stringBuilder, IEnumerable<Tuple<string, int, object>> fields)
         {
             foreach (var field in fields)
             {
