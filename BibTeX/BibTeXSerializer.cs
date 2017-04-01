@@ -18,6 +18,10 @@ namespace BibTeX
         protected readonly string BibTeXEndFieldValueCharacter;
         protected readonly string BibTeXFieldSeparatorCharacter = ",";
 
+        protected readonly string[] MonthNames = { "", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+
+        protected readonly string[] AbbreviatedMonthNames = { "", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
         public BibTeXFormatStyle FormatStyle { get; }
         public BibTeXMonthStyle MonthStyle { get; }
 
