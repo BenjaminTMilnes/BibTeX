@@ -60,6 +60,33 @@ namespace BibTeX
             return true;
         }
 
+        public bool ValidateBibTeXFields( IBibTeXEntry entry, IEnumerable<PropertyInfo> properties)
+        {
+            foreach(var property in properties)
+            {
+                ValidateBibTeXField(entry, property);
+            }
 
+            return true;
+        }
+
+        public bool ValidateBibTeXEntry( IBibTeXEntry entry)
+        {
+            var fields = _attributeReader.GetBibTeXFields(entry);
+
+            ValidateBibTeXFields(entry, fields);
+
+            return true;
+        }
+
+        public bool ValidateBibTeXDatabase( BibTeXDatabase database)
+        {
+            foreach(var entry in database.Entries)
+            {
+                ValidateBibTeXEntry(entry);
+            }
+
+            return true;
+        }
     }
 }
