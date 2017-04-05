@@ -62,6 +62,7 @@
     <Compile Include="BibTeXOptionalField.cs" />
     <Compile Include="BibTeXPhDThesis.cs" />
     <Compile Include="BibTeXProceedings.cs" />
+    <Compile Include="BibTeXRequiredFieldGroup.cs" />
     <Compile Include="BibTeXSerializer.cs" />
     <Compile Include="BibTeXTechReport.cs" />
     <Compile Include="BibTeXUnpublished.cs" />
