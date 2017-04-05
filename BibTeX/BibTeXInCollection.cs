@@ -32,6 +32,10 @@ namespace BibTeX
         [BibTeXOptionalField]
         public string Volume { get; set; }
 
+        [BibTeXFieldName("number")]
+        [BibTeXOptionalField]
+        public string Number { get; set; }
+
         [BibTeXFieldName("series")]
         [BibTeXOptionalField]
         public string Series { get; set; }

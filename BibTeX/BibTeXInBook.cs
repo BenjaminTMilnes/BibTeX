@@ -10,13 +10,23 @@ namespace BibTeX
     public class BibTeXInBook : BibTeXEntry
     {
         [BibTeXFieldName("author")]
+        [BibTeXRequiredFieldGroup("author/editor")]
         public string Author { get; set; }
+
+        [BibTeXFieldName("editor")]
+        [BibTeXRequiredFieldGroup("author/editor")]
+        public string Editor { get; set; }
 
         [BibTeXFieldName("title")]
         public string Title { get; set; }
 
         [BibTeXFieldName("chapter")]
+        [BibTeXRequiredFieldGroup("chapter/pages")]
         public string Chapter { get; set; }
+
+        [BibTeXFieldName("pages")]
+        [BibTeXRequiredFieldGroup("chapter/pages")]
+        public string Pages { get; set; }
 
         [BibTeXFieldName("publisher")]
         public string Publisher { get; set; }
@@ -27,6 +37,10 @@ namespace BibTeX
         [BibTeXFieldName("volume")]
         [BibTeXOptionalField]
         public string Volume { get; set; }
+
+        [BibTeXFieldName("number")]
+        [BibTeXOptionalField]
+        public string Number { get; set; }
 
         [BibTeXFieldName("series")]
         [BibTeXOptionalField]

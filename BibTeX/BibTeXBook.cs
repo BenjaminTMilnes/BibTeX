@@ -10,7 +10,12 @@ namespace BibTeX
     public class BibTeXBook : BibTeXEntry
     {
         [BibTeXFieldName("author")]
+        [BibTeXRequiredFieldGroup("author/editor")]
         public string Author { get; set; }
+
+        [BibTeXFieldName("editor")]
+        [BibTeXRequiredFieldGroup("author/editor")]
+        public string Editor { get; set; }
 
         [BibTeXFieldName("title")]
         public string Title { get; set; }
@@ -24,6 +29,10 @@ namespace BibTeX
         [BibTeXFieldName("volume")]
         [BibTeXOptionalField]
         public string Volume { get; set; }
+
+        [BibTeXFieldName("number")]
+        [BibTeXOptionalField]
+        public string Number { get; set; }
 
         [BibTeXFieldName("series")]
         [BibTeXOptionalField]
