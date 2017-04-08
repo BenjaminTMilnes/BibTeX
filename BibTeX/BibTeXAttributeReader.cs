@@ -342,6 +342,17 @@ namespace BibTeX
         }
 
         /// <summary>
+        /// Gets all of the fields in a required field group out of a set of C# properties.
+        /// </summary>
+        /// <param name="properties"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public IEnumerable<PropertyInfo> GetFieldsInBibTeXRequiredFieldGroup(IEnumerable<PropertyInfo> properties, string groupName)
+        {
+            return properties.Where((property) => IsBibTeXFieldInRequiredFieldGroup(property) && GetBibTeXRequiredFieldGroupName(property) == groupName);
+        }
+
+        /// <summary>
         /// Gets all of the fields in a required field group for a given C# Type.
         /// </summary>
         /// <param name="type"></param>
@@ -351,7 +362,7 @@ namespace BibTeX
         {
             var fields = GetBibTeXFields(type);
 
-            return fields.Where((field) => IsBibTeXFieldInRequiredFieldGroup(field) && GetBibTeXRequiredFieldGroupName(field) == groupName);
+            return GetFieldsInBibTeXRequiredFieldGroup(fields, groupName);
         }
 
         /// <summary>
