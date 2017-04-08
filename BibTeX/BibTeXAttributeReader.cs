@@ -192,6 +192,10 @@ namespace BibTeX
             return GetBibTeXFields(type);
         }
 
+        #endregion
+
+        #region GetOptionalFields
+
         /// <summary>
         /// Returns whether or not this C# property is an optional BibTeX field.
         /// </summary>
@@ -226,6 +230,10 @@ namespace BibTeX
             return GetBibTeXOptionalFields(type);
         }
 
+        #endregion
+
+        #region GetRequiredFields
+
         /// <summary>
         /// Returns whether or not this C# property is a required BibTeX field.
         /// </summary>
@@ -259,6 +267,10 @@ namespace BibTeX
 
             return GetBibTeXRequiredFields(type);
         }
+
+        #endregion
+
+        #region GetRequiredFieldGroups
 
         /// <summary>
         /// Gets whether this BibTeX field is in a required field group.
@@ -327,6 +339,32 @@ namespace BibTeX
             var type = GetBibTeXEntryType(entry);
 
             return GetBibTeXRequiredFieldGroupNames(type);
+        }
+
+        /// <summary>
+        /// Gets all of the fields in a required field group for a given C# Type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public IEnumerable<PropertyInfo> GetFieldsInBibTeXRequiredFieldGroup(Type type, string groupName)
+        {
+            var fields = GetBibTeXFields(type);
+
+            return fields.Where((field) => IsBibTeXFieldInRequiredFieldGroup(field) && GetBibTeXRequiredFieldGroupName(field) == groupName);
+        }
+
+        /// <summary>
+        /// Gets all of the fields in a required field group for a given BibTeX Entry.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public IEnumerable<PropertyInfo> GetFieldsInBibTeXRequiredFieldGroup(IBibTeXEntry entry, string groupName)
+        {
+            var type = GetBibTeXEntryType(entry);
+
+            return GetFieldsInBibTeXRequiredFieldGroup(type, groupName);
         }
 
         #endregion
