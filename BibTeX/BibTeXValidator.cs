@@ -33,44 +33,46 @@ namespace BibTeX
             _attributeReader = new BibTeXAttributeReader();
         }
 
-        public bool ValidateBibTeXField(IBibTeXEntry entry, PropertyInfo property)
+        public bool IsBibTeXFieldValueNone(object fieldValue)
         {
-            if (_attributeReader.IsBibTeXFieldRequired(property))
+            if (fieldValue is BibTeXMonth)
             {
-                var entryName = _attributeReader.GetBibTeXEntryName(entry);
-                var fieldName = _attributeReader.GetBibTeXFieldName(property);
-                var fieldValue = property.GetValue(entry);
+                return (BibTeXMonth)fieldValue == BibTeXMonth.None;
+            }
+            else
+            {
+                return string.IsNullOrWhiteSpace(fieldValue.ToString());
+            }
+        }
 
-                if (fieldValue is BibTeXMonth)
+        public bool ValidateBibTeXRequiredField(IBibTeXEntry entry, PropertyInfo property)
+        {
+            var entryName = _attributeReader.GetBibTeXEntryName(entry);
+            var fieldName = _attributeReader.GetBibTeXFieldName(property);
+            var fieldValue = property.GetValue(entry);
+
+            if (IsBibTeXFieldValueNone(fieldValue))
+            {
+                throw new RequiredFieldException(entryName, fieldName);
+            }
+
+            return true;
+        }
+
+        public bool ValidateBibTeXFields(IBibTeXEntry entry, IEnumerable<PropertyInfo> properties)
+        {
+            foreach (var property in properties)
+            {
+                if (_attributeReader.IsBibTeXFieldRequired(property))
                 {
-                    if ((BibTeXMonth)fieldValue == BibTeXMonth.None)
-                    {
-                        throw new RequiredFieldException(entryName, fieldName);
-                    }
-                }
-                else
-                {
-                    if (string.IsNullOrWhiteSpace(fieldValue.ToString()))
-                    {
-                        throw new RequiredFieldException(entryName, fieldName);
-                    }
+                    ValidateBibTeXRequiredField(entry, property);
                 }
             }
 
             return true;
         }
 
-        public bool ValidateBibTeXFields( IBibTeXEntry entry, IEnumerable<PropertyInfo> properties)
-        {
-            foreach(var property in properties)
-            {
-                ValidateBibTeXField(entry, property);
-            }
-
-            return true;
-        }
-
-        public bool ValidateBibTeXEntry( IBibTeXEntry entry)
+        public bool ValidateBibTeXEntry(IBibTeXEntry entry)
         {
             var fields = _attributeReader.GetBibTeXFields(entry);
 
@@ -79,9 +81,9 @@ namespace BibTeX
             return true;
         }
 
-        public bool ValidateBibTeXDatabase( BibTeXDatabase database)
+        public bool ValidateBibTeXDatabase(BibTeXDatabase database)
         {
-            foreach(var entry in database.Entries)
+            foreach (var entry in database.Entries)
             {
                 ValidateBibTeXEntry(entry);
             }
