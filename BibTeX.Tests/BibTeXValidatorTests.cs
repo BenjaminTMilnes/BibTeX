@@ -21,7 +21,7 @@ namespace BibTeX.Tests
         [ExpectedException(typeof(RequiredFieldException))]
         public void ValidateBibTeXEntryFailTest()
         {
-            var book = new BibTeXBook("", "a", "a", "2000");
+            var book = new BibTeXBook("a", "", "a", "2000");
 
             _validator.ValidateBibTeXEntry(book);
         }
