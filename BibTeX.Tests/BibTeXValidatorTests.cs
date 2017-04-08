@@ -19,9 +19,18 @@ namespace BibTeX.Tests
 
         [TestMethod]
         [ExpectedException(typeof(RequiredFieldException))]
-        public void ValidateBibTeXEntryFailTest()
+        public void ValidateBibTeXRequiredFieldFailTest()
         {
             var book = new BibTeXBook("a", "", "a", "2000");
+
+            _validator.ValidateBibTeXEntry(book);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(RequiredFieldGroupException))]
+        public void ValidateBibTeXRequiredFieldGroupFailTest()
+        {
+            var book = new BibTeXBook("", "a", "a", "2000");
 
             _validator.ValidateBibTeXEntry(book);
         }

@@ -54,6 +54,11 @@ namespace BibTeX
 
         public bool IsBibTeXFieldValueNone(object fieldValue)
         {
+            if (fieldValue == null)
+            {
+                return true;
+            }
+
             if (fieldValue is BibTeXMonth)
             {
                 return (BibTeXMonth)fieldValue == BibTeXMonth.None;
