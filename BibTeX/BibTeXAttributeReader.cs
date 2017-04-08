@@ -233,7 +233,7 @@ namespace BibTeX
         /// <returns></returns>
         public bool IsBibTeXFieldRequired(PropertyInfo property)
         {
-            return property.GetCustomAttributes<BibTeXFieldName>().Any() && !property.GetCustomAttributes<BibTeXOptionalField>().Any();
+            return property.GetCustomAttributes<BibTeXFieldName>().Any() && !property.GetCustomAttributes<BibTeXRequiredFieldGroup>().Any() && !property.GetCustomAttributes<BibTeXOptionalField>().Any();
         }
 
         /// <summary>
@@ -261,6 +261,79 @@ namespace BibTeX
         }
 
         /// <summary>
+        /// Gets whether this BibTeX field is in a required field group.
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public bool IsBibTeXFieldInRequiredFieldGroup(PropertyInfo property)
+        {
+            return property.GetCustomAttributes<BibTeXRequiredFieldGroup>().Any();
+        }
+
+        /// <summary>
+        /// Gets the name of the required field group that this BibTeX field is in.
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public string GetBibTeXRequiredFieldGroupName(PropertyInfo property)
+        {
+            return property.GetCustomAttribute<BibTeXRequiredFieldGroup>().Name;
+        }
+
+        /// <summary>
+        /// Gets all of the required field group names from a set of BibTeX fields.
+        /// </summary>
+        /// <param name="properties"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetBibTeXRequiredFieldGroupNames(IEnumerable<PropertyInfo> properties)
+        {
+            var groupNames = new List<string>();
+
+            foreach (var property in properties)
+            {
+                if (IsBibTeXFieldInRequiredFieldGroup(property))
+                {
+                    var groupName = GetBibTeXRequiredFieldGroupName(property);
+
+                    if (!groupNames.Contains(groupName))
+                    {
+                        groupNames.Add(groupName);
+                    }
+                }
+            }
+
+            return groupNames;
+        }
+
+        /// <summary>
+        /// Gets all of the required field group names for a given C# Type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetBibTeXRequiredFieldGroupNames(Type type)
+        {
+            var fields = GetBibTeXFields(type);
+
+            return GetBibTeXRequiredFieldGroupNames(fields);
+        }
+
+        /// <summary>
+        /// Gets all of the required field group names for a given BibTeX Entry.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetBibTeXRequiredFieldGroupNames(IBibTeXEntry entry)
+        {
+            var type = GetBibTeXEntryType(entry);
+
+            return GetBibTeXRequiredFieldGroupNames(type);
+        }
+
+        #endregion
+
+        #region GetFieldByName
+
+        /// <summary>
         /// Gets the BibTeX field with the given field name.
         /// </summary>
         /// <param name="type"></param>
@@ -285,6 +358,10 @@ namespace BibTeX
 
             return GetBibTeXFieldByName(type, name);
         }
+
+        #endregion
+
+        #region GetFieldsWithValues
 
         /// <summary>
         /// Given a BibTeX entry and a field, returns a tuple of the field name, order index, and value.
