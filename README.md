@@ -2,16 +2,57 @@
 
 A C# library for reading, writing, and editing BibTeX bibliographic databases
 
-## Primary Uses
+### How to ...
 
-### Representing BibTeX data as C# objects
+#### Create a new BibTeX entry
 
-This library contains a set of classes to represent the entries of a BibTeX database.
-The BibTeXDatabase class can be used to store and filter BibTeXEntry objects by type or by citation key.
+```C#
 
-### Compiling bibliographic data and converting it to the BibTeX file format
+var article = new BibTeXArticle();
+var book = new BibTeXBook();
+var booklet = new BibTeXBooklet();
+var conference = new BibTeXConference();
+var inBook = new BibTeXInBook();
+var inCollection = new BibTeXInCollection();
+var inProceedings = new BibTeXInProceedings();
+var manual = new BibTeXManual();
+var mastersThesis = new BibTeXMastersThesis();
+var miscellaneous = new BibTeXMiscellaneous();
+var phdThesis = new BibTeXPhDThesis();
+var proceedings = new BibTeXProceedings();
+var techReport = new BibTeXTechReport();
+var unpublished = new BibTeXUnpublished();
 
-BibTeXDatabase and BibTeXEntry objects can be converted into their text forms in a standard format, with options for
-using quotation marks or recurve brackets around the field values, and for whether whitespace is added for readability.
+```
 
+#### Create a new BibTeX database
 
+```C#
+
+var database = new BibTeXDatabase();
+
+```
+
+#### Add an entry to a database
+
+```C#
+
+database.Entries.Add(entry);
+
+```
+
+#### Get the book entries from a BibTeX database
+
+```C#
+
+var books = database.GetBooks();
+
+```
+
+#### Get the entry from a database with a given citation key
+
+```C#
+
+var entry = database.GetEntryByCitationKey("Milnes2017");
+
+```
