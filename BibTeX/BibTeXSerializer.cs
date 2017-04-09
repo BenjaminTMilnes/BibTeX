@@ -9,6 +9,7 @@ namespace BibTeX
     public class BibTeXSerializer
     {
         protected BibTeXAttributeReader _attributeReader;
+        protected BibTeXValidator _validator;
 
         protected readonly string BibTeXBeginEntryCharacter = "@";
         protected readonly string BibTeXBeginFieldsCharacter = "{";
@@ -24,11 +25,14 @@ namespace BibTeX
         public BibTeXFormatStyle FormatStyle { get; }
         public BibTeXMonthStyle MonthStyle { get; }
 
+        public bool IncludeNullFields { get; }
+
         #region Constructors
 
-        public BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType beginEndFieldValueCharacterType = BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle monthStyle = BibTeXMonthStyle.January, BibTeXFormatStyle formatStyle = BibTeXFormatStyle.Readable)
+        public BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType beginEndFieldValueCharacterType = BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle monthStyle = BibTeXMonthStyle.January, BibTeXFormatStyle formatStyle = BibTeXFormatStyle.Readable, bool includeNullFields = false)
         {
             _attributeReader = new BibTeXAttributeReader();
+            _validator = new BibTeXValidator();
 
             if (beginEndFieldValueCharacterType == BibTeXBeginEndFieldValueCharacterType.QuotationMarks)
             {
@@ -44,13 +48,14 @@ namespace BibTeX
 
             MonthStyle = monthStyle;
             FormatStyle = formatStyle;
+            IncludeNullFields = includeNullFields;
         }
 
         #endregion
 
         #region SerializeFieldValue
 
-        public string SerializeBibTeXFieldValue( object fieldValue)
+        public string SerializeBibTeXFieldValue(object fieldValue)
         {
             var stringBuilder = new StringBuilder();
 
@@ -58,8 +63,8 @@ namespace BibTeX
 
             return stringBuilder.ToString();
         }
-        
-        public void SerializeBibTeXFieldValue( StringBuilder stringBuilder, object fieldValue)
+
+        public void SerializeBibTeXFieldValue(StringBuilder stringBuilder, object fieldValue)
         {
             if (fieldValue is BibTeXMonth)
             {
@@ -120,14 +125,17 @@ namespace BibTeX
         {
             foreach (var field in fields)
             {
-                stringBuilder.Append(BibTeXFieldSeparatorCharacter);
-
-                if (FormatStyle == BibTeXFormatStyle.Readable)
+                if (!_validator.IsBibTeXFieldValueNone(field.Item3) || IncludeNullFields)
                 {
-                    stringBuilder.Append("\n\t");
-                }
+                    stringBuilder.Append(BibTeXFieldSeparatorCharacter);
 
-                SerializeBibTeXField(stringBuilder, field);
+                    if (FormatStyle == BibTeXFormatStyle.Readable)
+                    {
+                        stringBuilder.Append("\n\t");
+                    }
+
+                    SerializeBibTeXField(stringBuilder, field);
+                }
             }
         }
 

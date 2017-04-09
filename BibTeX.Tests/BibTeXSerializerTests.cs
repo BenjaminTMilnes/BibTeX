@@ -65,5 +65,18 @@ namespace BibTeX.Tests
 
             Assert.AreEqual("month = \"September\"", serializer.SerializeBibTeXField(field));
         }
+
+        [TestMethod]
+        public void SerializeBibTeXEntryTest()
+        {
+            var serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.January, BibTeXFormatStyle.Minimal);
+
+            var miscellaneous = new BibTeXMiscellaneous();
+
+            miscellaneous.CitationKey = "wxyz";
+            miscellaneous.Author = "abcd";
+
+            Assert.AreEqual("@misc{wxyz,author=\"abcd\"}\n", serializer.SerializeBibTeXEntry(miscellaneous));
+        }
     }
 }
