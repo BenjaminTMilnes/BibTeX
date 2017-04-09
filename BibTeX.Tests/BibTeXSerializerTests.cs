@@ -78,5 +78,18 @@ namespace BibTeX.Tests
 
             Assert.AreEqual("@misc{wxyz,author=\"abcd\"}\n", serializer.SerializeBibTeXEntry(miscellaneous));
         }
+
+        [TestMethod]
+        public void EscapeBibTeXFieldValueTest()
+        {
+            var serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.January, BibTeXFormatStyle.Minimal);
+
+            var miscellaneous = new BibTeXMiscellaneous();
+
+            miscellaneous.CitationKey = "wxyz";
+            miscellaneous.Title = "abcd \"efgh\" ijkl";
+
+            Assert.AreEqual("@misc{wxyz,title=\"abcd \\\"efgh\\\" ijkl\"}\n", serializer.SerializeBibTeXEntry(miscellaneous));
+        }
     }
 }

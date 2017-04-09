@@ -11,6 +11,8 @@ namespace BibTeX
         protected BibTeXAttributeReader _attributeReader;
         protected BibTeXValidator _validator;
 
+        public BibTeXBeginEndFieldValueCharacterType BeginEndFieldValueCharacterType { get; }
+
         protected readonly string BibTeXBeginEntryCharacter = "@";
         protected readonly string BibTeXBeginFieldsCharacter = "{";
         protected readonly string BibTeXEndFieldsCharacter = "}";
@@ -33,6 +35,8 @@ namespace BibTeX
         {
             _attributeReader = new BibTeXAttributeReader();
             _validator = new BibTeXValidator();
+
+            BeginEndFieldValueCharacterType = beginEndFieldValueCharacterType;
 
             if (beginEndFieldValueCharacterType == BibTeXBeginEndFieldValueCharacterType.QuotationMarks)
             {
@@ -72,8 +76,20 @@ namespace BibTeX
             }
             else
             {
-                stringBuilder.Append(fieldValue.ToString());
+                var escapedFieldValue = EscapeBibTeXFieldValue(fieldValue.ToString());
+
+                stringBuilder.Append(escapedFieldValue);
             }
+        }
+
+        public string EscapeBibTeXFieldValue(string fieldValue)
+        {
+            if (BeginEndFieldValueCharacterType == BibTeXBeginEndFieldValueCharacterType.QuotationMarks)
+            {
+                fieldValue = fieldValue.Replace("\"", "\\\"");
+            }
+
+            return fieldValue;
         }
 
         #endregion
