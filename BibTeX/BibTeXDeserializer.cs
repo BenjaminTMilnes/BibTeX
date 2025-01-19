@@ -399,22 +399,46 @@ namespace BibTeX
         {
             var fieldValue = "";
 
-            if (inputText[marker.Position] == '{')
-            {
-                marker.Position++;
-            }
-            else
+            var delimiter = "";
+
+            var c = inputText[marker.Position];
+
+            if (c == '=')
             {
                 return null;
             }
 
+            if (c == '{')
+            {
+                delimiter = "{}";
+                marker.Position++;
+            }
+            else if (c == '"')
+            {
+                delimiter = "\"";
+                marker.Position++;
+            }
+            else
+            {
+                delimiter = "none";
+            }
+
             while (marker.Position < inputText.Length)
             {
-                var c = inputText[marker.Position];
+                c = inputText[marker.Position];
 
-                if (c == '}')
+                if (delimiter == "{}" && c == '}')
                 {
                     marker.Position++;
+                    break;
+                }
+                else if (delimiter == "\"" && c == '"')
+                {
+                    marker.Position++;
+                    break;
+                }
+                else if (delimiter == "none" && c == ',')
+                {
                     break;
                 }
                 else
