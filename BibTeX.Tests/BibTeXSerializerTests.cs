@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BibTeX;
 
 namespace BibTeX.Tests
 {
-    [TestClass]
     public class BibTeXSerializerTests
     {
         private BibTeXAttributeReader _attributeReader;
@@ -20,7 +17,7 @@ namespace BibTeX.Tests
             _serializer = new BibTeXSerializer();
         }
 
-        [TestMethod]
+        [Fact]
         public void SerializeBibTeXFieldTest()
         {
             var book = new BibTeXBook();
@@ -30,29 +27,29 @@ namespace BibTeX.Tests
             var property = _attributeReader.GetBibTeXFieldByName(book, "author");
             var field = _attributeReader.GetBibTeXFieldWithValue(book, property);
 
-            Assert.AreEqual("author = \"B. T. Milnes\"", _serializer.SerializeBibTeXField(field));
+            Assert.Equal("author = \"B. T. Milnes\"", _serializer.SerializeBibTeXField(field));
         }
 
-        [TestMethod]
+        [Fact]
         public void SerializeBibTeXMonthTest()
         {
             var serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.January);
             var month = BibTeXMonth.December;
 
-            Assert.AreEqual("December", serializer.SerializeBibTeXMonth(month));
+            Assert.Equal("December", serializer.SerializeBibTeXMonth(month));
 
             serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.Jan);
             month = BibTeXMonth.November;
 
-            Assert.AreEqual("Nov", serializer.SerializeBibTeXMonth(month));
+            Assert.Equal("Nov", serializer.SerializeBibTeXMonth(month));
 
             serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.Numeric);
             month = BibTeXMonth.October;
 
-            Assert.AreEqual("10", serializer.SerializeBibTeXMonth(month));
+            Assert.Equal("10", serializer.SerializeBibTeXMonth(month));
         }
 
-        [TestMethod]
+        [Fact]
         public void SerializeBibTeXMonthFieldTest()
         {
             var serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.January);
@@ -63,10 +60,10 @@ namespace BibTeX.Tests
             var property = _attributeReader.GetBibTeXFieldByName(book, "month");
             var field = _attributeReader.GetBibTeXFieldWithValue(book, property);
 
-            Assert.AreEqual("month = \"September\"", serializer.SerializeBibTeXField(field));
+            Assert.Equal("month = \"September\"", serializer.SerializeBibTeXField(field));
         }
 
-        [TestMethod]
+        [Fact]
         public void SerializeBibTeXEntryTest()
         {
             var serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.January, BibTeXFormatStyle.Minimal);
@@ -76,10 +73,10 @@ namespace BibTeX.Tests
             miscellaneous.CitationKey = "wxyz";
             miscellaneous.Author = "abcd";
 
-            Assert.AreEqual("@misc{wxyz,author=\"abcd\"}\n", serializer.SerializeBibTeXEntry(miscellaneous));
+            Assert.Equal("@misc{wxyz,author=\"abcd\"}\n", serializer.SerializeBibTeXEntry(miscellaneous));
         }
 
-        [TestMethod]
+        [Fact]
         public void EscapeBibTeXFieldValueTest()
         {
             var serializer = new BibTeXSerializer(BibTeXBeginEndFieldValueCharacterType.QuotationMarks, BibTeXMonthStyle.January, BibTeXFormatStyle.Minimal);
@@ -89,7 +86,7 @@ namespace BibTeX.Tests
             miscellaneous.CitationKey = "wxyz";
             miscellaneous.Title = "abcd \"efgh\" ijkl";
 
-            Assert.AreEqual("@misc{wxyz,title=\"abcd \\\"efgh\\\" ijkl\"}\n", serializer.SerializeBibTeXEntry(miscellaneous));
+            Assert.Equal("@misc{wxyz,title=\"abcd \\\"efgh\\\" ijkl\"}\n", serializer.SerializeBibTeXEntry(miscellaneous));
         }
     }
 }

@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BibTeX\BibTeX.csproj" />
+  </ItemGroup>
+
 </Project>

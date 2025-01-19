@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BibTeX.Tests
 {
-    [TestClass]
     public class BibTeXValidatorTests
     {
         private BibTeXValidator _validator;
@@ -17,30 +15,28 @@ namespace BibTeX.Tests
             _validator = new BibTeXValidator();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(RequiredFieldException))]
+        [Fact]
         public void ValidateBibTeXRequiredFieldFailTest()
         {
             var book = new BibTeXBook("a", "", "a", "2000");
 
-            _validator.ValidateBibTeXEntry(book);
+            Assert.Throws<RequiredFieldException>(() => _validator.ValidateBibTeXEntry(book));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(RequiredFieldGroupException))]
+        [Fact]
         public void ValidateBibTeXRequiredFieldGroupFailTest()
         {
             var book = new BibTeXBook("", "a", "a", "2000");
 
-            _validator.ValidateBibTeXEntry(book);
+            Assert.Throws<RequiredFieldGroupException>(() => _validator.ValidateBibTeXEntry(book));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidateBibTeXEntryPassTest()
         {
             var book = new BibTeXBook("a", "a", "a", "2000");
 
-            Assert.IsTrue(_validator.ValidateBibTeXEntry(book));
+            Assert.True(_validator.ValidateBibTeXEntry(book));
         }
     }
 }
