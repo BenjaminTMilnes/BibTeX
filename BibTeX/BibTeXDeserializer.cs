@@ -103,15 +103,96 @@ namespace BibTeX
 
                 entry.CitationKey = citationKey;
 
-                if (fields.Any(f => f.Item1 == "author"))
-                {
-                    entry.Author = fields.First(f => f.Item1 == "author").Item2;
-                }
+                entry.Author = GetFieldValue(fields, "author", "");
+                entry.Editor = GetFieldValue(fields, "editor", "");
+                entry.Title = GetFieldValue(fields, "title", "");
+                entry.Publisher = GetFieldValue(fields, "publisher", "");
+                entry.Year = GetFieldValue(fields, "year", "");
+                entry.Volume = GetFieldValue(fields, "volume", "");
+                entry.Number = GetFieldValue(fields, "number", "");
+                entry.Series = GetFieldValue(fields, "series", "");
+                entry.Address = GetFieldValue(fields, "address", "");
+                entry.Edition = GetFieldValue(fields, "edition", "");
+                entry.Month = GetFieldValue(fields, "month", BibTeXMonth.None);
 
                 return entry;
             }
 
             return null;
+        }
+
+        public T GetFieldValue<T>(List<Tuple<string, string>> fields, string fieldName, T defaultValue)
+        {
+            if (fields.Any(f => f.Item1 == fieldName))
+            {
+                var fieldValue = fields.First(f => f.Item1 == fieldName).Item2;
+
+                if (typeof(T) == typeof(BibTeXMonth))
+                {
+                    var month = BibTeXMonth.None;
+
+                    switch (fieldValue.Trim().ToLower())
+                    {
+                        case "january":
+                        case "jan":
+                            month = BibTeXMonth.January;
+                            break;
+                        case "february":
+                        case "feb":
+                            month = BibTeXMonth.February;
+                            break;
+                        case "march":
+                        case "mar":
+                            month = BibTeXMonth.March;
+                            break;
+                        case "april":
+                        case "apr":
+                            month = BibTeXMonth.April;
+                            break;
+                        case "may":
+                            month = BibTeXMonth.May;
+                            break;
+                        case "june":
+                        case "jun":
+                            month = BibTeXMonth.June;
+                            break;
+                        case "july":
+                        case "jul":
+                            month = BibTeXMonth.July;
+                            break;
+                        case "august":
+                        case "aug":
+                            month = BibTeXMonth.August;
+                            break;
+                        case "september":
+                        case "sep":
+                            month = BibTeXMonth.September;
+                            break;
+                        case "october":
+                        case "oct":
+                            month = BibTeXMonth.October;
+                            break;
+                        case "november":
+                        case "nov":
+                            month = BibTeXMonth.November;
+                            break;
+                        case "december":
+                        case "dec":
+                            month = BibTeXMonth.December;
+                            break;
+                    }
+
+                    return (T)Convert.ChangeType(month, typeof(T));
+                }
+                else
+                {
+                    return (T)Convert.ChangeType(fieldValue, typeof(T));
+                }
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
         /// <summary>

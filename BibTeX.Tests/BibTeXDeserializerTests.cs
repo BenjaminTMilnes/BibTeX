@@ -150,15 +150,30 @@ namespace BibTeX.Tests
         public void GetEntryTest1()
         {
             var input = @"@book{Milnes2025,
-                            author={B. T. Milnes}
+                            author={B. T. Milnes},
+                            title={A Very Interesting Book},
+                            publisher={Independently Published},
+                            year={2025},
+                            month={january},
+                            edition={2}
                             }";
 
             var bibtexDeserializer = new BibTeXDeserializer();
 
-            var output = bibtexDeserializer.GetEntry(input, new Marker()) as BibTeXBook;
+            var output = bibtexDeserializer.GetEntry(input, new Marker());
 
-            Assert.Equal("Milnes2025", output.CitationKey);
-            Assert.Equal("B. T. Milnes", output.Author);
+            Assert.NotNull(output);
+            Assert.IsType<BibTeXBook>(output);
+
+            var book = output as BibTeXBook;
+
+            Assert.Equal("Milnes2025", book.CitationKey);
+            Assert.Equal("B. T. Milnes", book.Author);
+            Assert.Equal("A Very Interesting Book", book.Title);
+            Assert.Equal("Independently Published", book.Publisher);
+            Assert.Equal("2025", book.Year);
+            Assert.Equal(BibTeXMonth.January, book.Month);
+            Assert.Equal("2", book.Edition);
         }
     }
 }
