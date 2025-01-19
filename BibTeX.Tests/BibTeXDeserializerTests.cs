@@ -84,5 +84,31 @@ namespace BibTeX.Tests
             Assert.Equal(fieldName, output.Item1);
             Assert.Equal(fieldValue, output.Item2);
         }
+
+        [Theory]
+        [InlineData("Milnes2025", "Milnes2025")]
+        public void GetCitationKeyTest1(string input, string citationKey)
+        {
+            var bibtexDeserializer = new BibTeXDeserializer();
+
+            var output = bibtexDeserializer.GetCitationKey(input, new Marker());
+
+            Assert.Equal(citationKey, output);
+        }
+
+        [Fact]
+        public void GetEntryTest1()
+        {
+            var input = @"@book{Milnes2025,
+                            author={B. T. Milnes}
+                            }";
+
+            var bibtexDeserializer = new BibTeXDeserializer();
+
+            var output = bibtexDeserializer.GetEntry(input, new Marker()) as BibTeXBook;
+
+            Assert.Equal("Milnes2025", output.CitationKey);
+            Assert.Equal("B. T. Milnes", output.Author);
+        }
     }
 }
