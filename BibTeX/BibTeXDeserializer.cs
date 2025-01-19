@@ -500,7 +500,7 @@ namespace BibTeX
 
         public bool Expect(string inputText, Marker marker, string text)
         {
-            if (inputText.Substring(marker.Position, text.Length) == text)
+            if (marker.Position + text.Length <= inputText.Length && inputText.Substring(marker.Position, text.Length) == text)
             {
                 marker.Position += text.Length;
 
