@@ -32,10 +32,15 @@ namespace BibTeX.Tests
         [InlineData("a1", "a")]
         [InlineData("aa1", "aa")]
         [InlineData("aaa1", "aaa")]
+        [InlineData("a123", "a")]
+        [InlineData("aa123", "aa")]
+        [InlineData("aaa123", "aaa")]
         [InlineData("title1", "title")]
+        [InlineData("title123", "title")]
         [InlineData("title_", "title")]
         [InlineData("title-", "title")]
         [InlineData("title=", "title")]
+        [InlineData("title={}", "title")]
         public void GetFieldNameTest1(string input, string fieldName)
         {
             var bibtexDeserializer = new BibTeXDeserializer();
@@ -43,6 +48,25 @@ namespace BibTeX.Tests
             var output = bibtexDeserializer.GetFieldName(input, new Marker());
 
             Assert.Equal(fieldName, output);
+        }
+
+        [Theory]
+        [InlineData("1")]
+        [InlineData("123")]
+        [InlineData("_")]
+        [InlineData("-")]
+        [InlineData("=")]
+        [InlineData("{}")]
+        [InlineData("()")]
+        [InlineData("[]")]
+        [InlineData("@")]
+        public void GetFieldNameTest2(string input)
+        {
+            var bibtexDeserializer = new BibTeXDeserializer();
+
+            var output = bibtexDeserializer.GetFieldName(input, new Marker());
+
+            Assert.Null(output);
         }
 
         [Theory]
