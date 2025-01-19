@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,39 @@ namespace BibTeX
         public static readonly string CITATION_KEY_ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
         public static readonly string FIELD_NAME_ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         public static readonly string WHITE_SPACE_CHARACTERS = " \t\n\r";
+
+        public BibTeXDatabase GetDatabaseFromFile(string filePath)
+        {
+            var fileText = File.ReadAllText(filePath);
+
+            return GetDatabase(fileText);
+        }
+
+        public BibTeXDatabase GetDatabase(string inputText)
+        {
+            return GetDatabase(inputText, new Marker());
+        }
+
+        public BibTeXDatabase GetDatabase(string inputText, Marker marker)
+        {
+            var database = new BibTeXDatabase();
+
+            while (marker.Position < inputText.Length)
+            {
+                var entry = GetEntry(inputText, marker);
+
+                if (entry != null)
+                {
+                    database.Entries.Add(entry);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return database;
+        }
 
         /// <summary>
         /// Gets an entry at the given position in the input text and returns it. If no valid entry is found, returns null.
@@ -113,6 +147,23 @@ namespace BibTeX
                 entry.Series = GetFieldValue(fields, "series", "");
                 entry.Address = GetFieldValue(fields, "address", "");
                 entry.Edition = GetFieldValue(fields, "edition", "");
+                entry.Month = GetFieldValue(fields, "month", BibTeXMonth.None);
+
+                return entry;
+            }
+            if (_type == "article")
+            {
+                var entry = new BibTeXArticle();
+
+                entry.CitationKey = citationKey;
+
+                entry.Author = GetFieldValue(fields, "author", "");
+                entry.Title = GetFieldValue(fields, "title", "");
+                entry.Journal = GetFieldValue(fields, "journal", "");
+                entry.Year = GetFieldValue(fields, "year", "");
+                entry.Volume = GetFieldValue(fields, "volume", "");
+                entry.Number = GetFieldValue(fields, "number", "");
+                entry.Pages = GetFieldValue(fields, "pages", "");
                 entry.Month = GetFieldValue(fields, "month", BibTeXMonth.None);
 
                 return entry;
