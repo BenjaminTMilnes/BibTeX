@@ -52,6 +52,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BibTeXAttributeReaderTests.cs" />
+    <Compile Include="BibTeXDeserializerTests.cs" />
     <Compile Include="BibTeXSerializerTests.cs" />
     <Compile Include="BibTeXValidatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

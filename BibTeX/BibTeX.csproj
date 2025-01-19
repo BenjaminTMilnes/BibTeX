@@ -48,6 +48,7 @@
     <Compile Include="BibTeXBooklet.cs" />
     <Compile Include="BibTeXConference.cs" />
     <Compile Include="BibTeXDatabase.cs" />
+    <Compile Include="BibTeXDeserializer.cs" />
     <Compile Include="BibTeXEntry.cs" />
     <Compile Include="BibTeXEntryName.cs" />
     <Compile Include="BibTeXFieldName.cs" />
