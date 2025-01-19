@@ -437,7 +437,7 @@ namespace BibTeX
                     marker.Position++;
                     break;
                 }
-                else if (delimiter == "none" && c == ',')
+                else if (delimiter == "none" && (c == ',' || c == '}'))
                 {
                     break;
                 }
@@ -446,6 +446,11 @@ namespace BibTeX
                     fieldValue += c;
                     marker.Position++;
                 }
+            }
+
+            if (delimiter == "none")
+            {
+                fieldValue = fieldValue.Trim();
             }
 
             if (fieldValue != "")
