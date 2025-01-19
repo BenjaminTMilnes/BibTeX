@@ -15,6 +15,13 @@ namespace BibTeX
             Entries = new List<IBibTeXEntry>();
         }
 
+        public static BibTeXDatabase Load(string filePath)
+        {
+            var bibtexDeserializer = new BibTeXDeserializer();
+
+            return bibtexDeserializer.GetDatabaseFromFile(filePath);
+        }
+
         #region GetEntriesByCitationKey
 
         public IBibTeXEntry GetEntryByCitationKey(string citationKey)
