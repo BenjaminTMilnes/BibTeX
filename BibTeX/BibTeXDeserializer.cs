@@ -18,20 +18,26 @@ namespace BibTeX
         }
     }
 
+    /// <summary>
+    /// A class for parsing a BibTeX database from text.
+    /// </summary>
     public class BibTeXDeserializer
     {
         public static readonly string CITATION_KEY_ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
         public static readonly string FIELD_NAME_ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        public static readonly string WHITE_SPACE_CHARACTERS = " \t\n\r";
 
+        /// <summary>
+        /// Gets an entry at the given position in the input text and returns it. If no valid entry is found, returns null.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public BibTeXEntry GetEntry(string inputText, Marker marker)
         {
-            var c = inputText[marker.Position];
+            GetWhiteSpace(inputText, marker);
 
-            if (c == '@')
-            {
-                marker.Position++;
-            }
-            else
+            if (!Expect(inputText, marker, "@"))
             {
                 return null;
             }
@@ -43,16 +49,14 @@ namespace BibTeX
                 return null;
             }
 
-            c = inputText[marker.Position];
+            GetWhiteSpace(inputText, marker);
 
-            if (c == '{')
-            {
-                marker.Position++;
-            }
-            else
+            if (!Expect(inputText, marker, "{"))
             {
                 return null;
             }
+
+            GetWhiteSpace(inputText, marker);
 
             var citationKey = GetCitationKey(inputText, marker);
 
@@ -67,13 +71,7 @@ namespace BibTeX
             {
                 GetWhiteSpace(inputText, marker);
 
-                c = inputText[marker.Position];
-
-                if (c == ',')
-                {
-                    marker.Position++;
-                }
-                else
+                if (!Expect(inputText, marker, ","))
                 {
                     break;
                 }
@@ -92,13 +90,9 @@ namespace BibTeX
                 }
             }
 
-            c = inputText[marker.Position];
+            GetWhiteSpace(inputText, marker);
 
-            if (c == '}')
-            {
-                marker.Position++;
-            }
-            else
+            if (!Expect(inputText, marker, "}"))
             {
                 return null;
             }
@@ -120,6 +114,12 @@ namespace BibTeX
             return null;
         }
 
+        /// <summary>
+        /// Gets an entry type at the given position in the input text and returns it. If none is found, returns null.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public string GetType(string inputText, Marker marker)
         {
             var _type = "";
@@ -149,6 +149,12 @@ namespace BibTeX
             }
         }
 
+        /// <summary>
+        /// Gets a citation key at the given position in the input text and returns it. If none is found, returns null.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public string GetCitationKey(string inputText, Marker marker)
         {
             var citationKey = "";
@@ -178,8 +184,16 @@ namespace BibTeX
             }
         }
 
+        /// <summary>
+        /// Gets a field at the given position in the input text and returns it. If none is found, returns null.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public Tuple<string, string> GetField(string inputText, Marker marker)
         {
+            GetWhiteSpace(inputText, marker);
+
             var fieldName = GetFieldName(inputText, marker);
 
             if (fieldName == null)
@@ -187,16 +201,14 @@ namespace BibTeX
                 return null;
             }
 
-            var c = inputText[marker.Position];
+            GetWhiteSpace(inputText, marker);
 
-            if (c == '=')
-            {
-                marker.Position++;
-            }
-            else
+            if (!Expect(inputText, marker, "="))
             {
                 return null;
             }
+
+            GetWhiteSpace(inputText, marker);
 
             var fieldValue = GetFieldValue(inputText, marker);
 
@@ -210,6 +222,12 @@ namespace BibTeX
             return field;
         }
 
+        /// <summary>
+        /// Gets a field name at the given position in the input text and returns it. If none is found, returns null.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public string GetFieldName(string inputText, Marker marker)
         {
             var fieldName = "";
@@ -239,6 +257,12 @@ namespace BibTeX
             }
         }
 
+        /// <summary>
+        /// Gets a field value at the given position in the input text and returns it. If none is found, returns null.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public string GetFieldValue(string inputText, Marker marker)
         {
             var fieldValue = "";
@@ -278,17 +302,23 @@ namespace BibTeX
             }
         }
 
+        /// <summary>
+        /// Gets any white space at the given position in the input text and returns it. If none is found, returns null.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public string GetWhiteSpace(string inputText, Marker marker)
         {
-            var t = "";
+            var whiteSpace = "";
 
             while (marker.Position < inputText.Length)
             {
                 var c = inputText[marker.Position];
 
-                if (" \t\n\r".Contains(c))
+                if (WHITE_SPACE_CHARACTERS.Contains(c))
                 {
-                    t += c;
+                    whiteSpace += c;
                     marker.Position++;
                 }
                 else
@@ -297,13 +327,27 @@ namespace BibTeX
                 }
             }
 
-            if (t != "")
+            if (whiteSpace != "")
             {
-                return t;
+                return whiteSpace;
             }
             else
             {
                 return null;
+            }
+        }
+
+        public bool Expect(string inputText, Marker marker, string text)
+        {
+            if (inputText.Substring(marker.Position, text.Length) == text)
+            {
+                marker.Position += text.Length;
+
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
