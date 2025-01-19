@@ -22,6 +22,38 @@ namespace BibTeX
     {
         public static readonly string FIELD_NAME_ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
+        public Tuple<string, string> GetField(string inputText, Marker marker)
+        {
+            var fieldName = GetFieldName(inputText, marker);
+
+            if (fieldName == null)
+            {
+                return null;
+            }
+
+            var c = inputText[marker.Position];
+
+            if (c == '=')
+            {
+                marker.Position++;
+            }
+            else
+            {
+                return null;
+            }
+
+            var fieldValue = GetFieldValue(inputText, marker);
+
+            if (fieldValue == null)
+            {
+                return null;
+            }
+
+            var field = new Tuple<string, string>(fieldName, fieldValue);
+
+            return field;
+        }
+
         public string GetFieldName(string inputText, Marker marker)
         {
             var fieldName = "";

@@ -62,5 +62,27 @@ namespace BibTeX.Tests
 
             Assert.Equal(fieldValue, output);
         }
+
+        [Theory]
+        [InlineData("a={b}", "a", "b")]
+        [InlineData("abc={def}", "abc", "def")]
+        [InlineData("title={abc}", "title", "abc")]
+        [InlineData("author={B. T. Milnes}", "author", "B. T. Milnes")]
+        [InlineData("year={2025}", "year", "2025")]
+        [InlineData("month={January}", "month", "January")]
+        [InlineData("journal={abc}", "journal", "abc")]
+        [InlineData("volume={123}", "volume", "123")]
+        [InlineData("number={123}", "number", "123")]
+        [InlineData("publisher={abc}", "publisher", "abc")]
+        [InlineData("URL={http://www.benjamintmilnes.com}", "URL", "http://www.benjamintmilnes.com")]
+        public void GetFieldTest1(string input, string fieldName, string fieldValue)
+        {
+            var bibtexDeserializer = new BibTeXDeserializer();
+
+            var output = bibtexDeserializer.GetField(input, new Marker());
+
+            Assert.Equal(fieldName, output.Item1);
+            Assert.Equal(fieldValue, output.Item2);
+        }
     }
 }
