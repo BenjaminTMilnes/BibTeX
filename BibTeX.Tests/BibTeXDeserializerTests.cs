@@ -44,5 +44,23 @@ namespace BibTeX.Tests
 
             Assert.Equal(fieldName, output);
         }
+
+        [Theory]
+        [InlineData("{a}", "a")]
+        [InlineData("{aa}", "aa")]
+        [InlineData("{aaa}", "aaa")]
+        [InlineData("{abc}", "abc")]
+        [InlineData("{2025}", "2025")]
+        [InlineData("{January}", "January")]
+        [InlineData("{1-10}", "1-10")]
+        [InlineData("{http://www.benjamintmilnes.com}", "http://www.benjamintmilnes.com")]
+        public void GetFieldValueTest1(string input, string fieldValue)
+        {
+            var bibtexDeserializer = new BibTeXDeserializer();
+
+            var output = bibtexDeserializer.GetFieldValue(input, new Marker());
+
+            Assert.Equal(fieldValue, output);
+        }
     }
 }

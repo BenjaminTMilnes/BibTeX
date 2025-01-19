@@ -21,6 +21,7 @@ namespace BibTeX
     public class BibTeXDeserializer
     {
         public static readonly string FIELD_NAME_ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
         public string GetFieldName(string inputText, Marker marker)
         {
             var fieldName = "";
@@ -43,6 +44,45 @@ namespace BibTeX
             if (fieldName != "")
             {
                 return fieldName;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public string GetFieldValue(string inputText, Marker marker)
+        {
+            var fieldValue = "";
+
+            if (inputText[marker.Position] == '{')
+            {
+                marker.Position++;
+            }
+            else
+            {
+                return null;
+            }
+
+            while (marker.Position < inputText.Length)
+            {
+                var c = inputText[marker.Position];
+
+                if (c == '}')
+                {
+                    marker.Position++;
+                    break;
+                }
+                else
+                {
+                    fieldValue += c;
+                    marker.Position++;
+                }
+            }
+
+            if (fieldValue != "")
+            {
+                return fieldValue;
             }
             else
             {
