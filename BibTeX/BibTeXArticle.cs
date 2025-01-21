@@ -35,7 +35,15 @@ namespace BibTeX
         [BibTeXFieldName("month")]
         [BibTeXOptionalField]
         public BibTeXMonth Month { get; set; }
-        
+
+        [BibTeXFieldName("url")]
+        [BibTeXOptionalField]
+        public string URL { get; set; }
+
+        [BibTeXFieldName("doi")]
+        [BibTeXOptionalField]
+        public string DOI { get; set; }
+
         public BibTeXArticle() { }
 
         public BibTeXArticle(string author, string title, string journal, string year, string volume)

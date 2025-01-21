@@ -17,5 +17,10 @@ namespace BibTeX
 
             return serializer.SerializeBibTeXDatabase(database);
         }
+
+        public static string[] SplitOnAnd(string text)
+        {
+            return text.Split(new string[] { " and " }, StringSplitOptions.None).Select(t => t.Trim()).Where(t => t != "").ToArray();
+        }
     }
 }

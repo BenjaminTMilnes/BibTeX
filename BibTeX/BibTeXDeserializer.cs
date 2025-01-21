@@ -165,6 +165,8 @@ namespace BibTeX
                 entry.Number = GetFieldValue(fields, "number", "");
                 entry.Pages = GetFieldValue(fields, "pages", "");
                 entry.Month = GetFieldValue(fields, "month", BibTeXMonth.None);
+                entry.URL = GetFieldValue(fields, "url", "");
+                entry.DOI = GetFieldValue(fields, "doi", "");
 
                 return entry;
             }
